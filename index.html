@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KongYJen Designer | Portfolio</title>
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #000000;
+            --accent-bauhaus: #ff4500; /* Red */
+            --border-gray: #e0e0e0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; 
+            background-color: var(--bg-color); 
+            color: var(--text-color);
+            line-height: 1.5;
+        }
+
+        /* ABCD Navigation Style */
+        nav {
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            padding: 30px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            z-index: 100;
+            background: rgba(255,255,255,0.9);
+        }
+
+        .logo { font-weight: 700; font-size: 24px; text-transform: uppercase; letter-spacing: -1px; }
+        .nav-links { list-style: none; text-align: right; }
+        .nav-links li { font-size: 14px; margin-bottom: 5px; cursor: pointer; }
+
+        /* Project Grid */
+        main { padding-top: 150px; padding-bottom: 100px; }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1px;
+            background-color: var(--border-gray);
+            border: 1px solid var(--border-gray);
+        }
+
+        .project-card {
+            background-color: white;
+            padding: 20px;
+            aspect-ratio: 4/5;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .project-card:hover { filter: contrast(1.1); }
+        .project-card img { width: 100%; height: 85%; object-fit: cover; background: #f0f0f0; }
+        .project-info { margin-top: 15px; }
+        .project-title { font-weight: bold; font-size: 14px; text-transform: uppercase; }
+
+        /* Detail Page Overlay */
+        #detail-view {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: white;
+            z-index: 200;
+            overflow-y: auto;
+            padding: 40px;
+        }
+
+        .detail-header { margin-top: 100px; max-width: 800px; }
+        .detail-header h1 { font-size: 48px; margin-bottom: 20px; }
+        .bilingual-text { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin: 50px 0; border-top: 1px solid #000; padding-top: 20px;}
+        
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        .gallery img { width: 100%; background: #eee; }
+
+        .close-btn { position: fixed; top: 30px; right: 40px; font-size: 30px; cursor: pointer; z-index: 300; }
+
+        @media (max-width: 768px) {
+            .grid { grid-template-columns: 1fr; }
+            .bilingual-text { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">KongYJen Designer</div>
+        <ul class="nav-links">
+            <li>WORKS</li>
+            <li>INFO</li>
+            <li>CONTACT</li>
+        </ul>
+    </nav>
+
+    <main>
+        <div class="grid" id="projectGrid">
+            </div>
+    </main>
+
+    <div id="detail-view">
+        <div class="close-btn" onclick="closeDetail()">×</div>
+        <div class="detail-header">
+            <h1 id="detailTitle">PROJECT NAME</h1>
+            <p>Year: 2026 | Client: Editorial</p>
+        </div>
+
+        <div class="bilingual-text">
+            <div class="en">
+                <p>The convergence of Bauhaus colors and stainless steel, we find a new resonance between humanity and machine. This project explores the boundary between the physical metal and the digital primary colors, creating a visual syntax that speaks to the future of design.</p>
+            </div>
+            <div class="zh">
+                <p>在包豪斯色彩与不锈钢的交汇点，我们找到了人与机器之间的新共鸣。本项目探索了物理金属与数字原色之间的界限，创造了一种对话未来设计的视觉语法。</p>
+            </div>
+        </div>
+
+        <div class="gallery" id="detailGallery">
+            </div>
+    </div>
+
+    <script>
+        // Generate 30 projects
+        const grid = document.getElementById('projectGrid');
+        for (let i = 1; i <= 30; i++) {
+            const card = document.createElement('div');
+            card.className = 'project-card';
+            card.onclick = () => openDetail(`Project ${i}`);
+            card.innerHTML = `
+                <img src="https://picsum.photos/seed/${i+100}/800/1000" alt="Work ${i}">
+                <div class="project-info">
+                    <div class="project-title">WK-${String(i).padStart(3, '0')} / Bauhaus Steel Experiment</div>
+                </div>
+            `;
+            grid.appendChild(card);
+        }
+
+        function openDetail(title) {
+            document.getElementById('detailTitle').innerText = title;
+            const gallery = document.getElementById('detailGallery');
+            gallery.innerHTML = '';
+            // Generate 15 images for detail
+            for (let i = 1; i <= 15; i++) {
+                const img = document.createElement('img');
+                img.src = `https://picsum.photos/seed/detail${i+Math.random()}/1200/800`;
+                gallery.appendChild(img);
+            }
+            document.getElementById('detail-view').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeDetail() {
+            document.getElementById('detail-view').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+    </script>
+</body>
+</html>
