@@ -1,167 +1,261 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KongYJen Designer | Portfolio</title>
-    <style>
-        :root {
-            --bg-color: #ffffff;
-            --text-color: #000000;
-            --accent-bauhaus: #ff4500; /* Red */
-            --border-gray: #e0e0e0;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Premium Portfolio | Premium Light & Liquid Glass</title>
+  <style>
+    /* =========================================
+       ✨ 全局参数配置区 (在这里修改颜色、圆角、模糊度)
+       ========================================= */
+    :root {
+      /* 背景色：Apple 经典的极浅灰 */
+      --page-bg: #fbfbfd; 
+      /* 文字主色：深灰，比纯黑更柔和 */
+      --text-main: #1d1d1f;
+      /* 文字辅色：灰色，用于描述 */
+      --text-muted: #86868b;
+      
+      /* 卡片毛玻璃参数 - 极其透明且通透 */
+      --glass-bg: rgba(255, 255, 255, 0.4); /* 背景透明度 */
+      --glass-blur: blur(50px);              /* 高斯模糊强度 */
+      --glass-border: 1px solid rgba(255, 255, 255, 0.9); /* 高光边缘 */
+      --glass-shadow: 0 30px 60px rgba(0, 0, 0, 0.05);     /* 柔和阴影 */
+      
+      /* 全局大圆角，参考 Apple 官网 */
+      --border-radius-card: 48px;
+      --border-radius-img: 24px;
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; 
-            background-color: var(--bg-color); 
-            color: var(--text-color);
-            line-height: 1.5;
-        }
+      /* 流体光晕：Siri 风格的极柔和高雅渐变 (粉、蓝、黄) */
+      --blob-1: #ffbfff;
+      --blob-2: #c6e3ff;
+      --blob-3: #ffefba;
+    }
 
-        /* ABCD Navigation Style */
-        nav {
-            position: fixed;
-            top: 0; left: 0; width: 100%;
-            padding: 30px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            z-index: 100;
-            background: rgba(255,255,255,0.9);
-        }
+    /* 基础重置与排版 */
+    body {
+      margin: 0;
+      background-color: var(--page-bg);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased; /* 字体更细腻 */
+    }
 
-        .logo { font-weight: 700; font-size: 24px; text-transform: uppercase; letter-spacing: -1px; }
-        .nav-links { list-style: none; text-align: right; }
-        .nav-links li { font-size: 14px; margin-bottom: 5px; cursor: pointer; }
+    /* =========================================
+       💧 Liquid 流体背景动画 
+       ========================================= */
+    .background {
+      position: fixed; top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      z-index: -1; overflow: hidden;
+    }
+    
+    .blob {
+      position: absolute;
+      filter: blur(100px);
+      opacity: 0.9;
+      animation: fluidMove 15s infinite alternate ease-in-out;
+    }
+    .blob1 { top: -20%; left: -10%; width: 60vw; height: 60vw; background: var(--blob-1); border-radius: 40% 60% 70% 30%; }
+    .blob2 { bottom: -20%; right: -10%; width: 70vw; height: 70vw; background: var(--blob-2); border-radius: 60% 40% 30% 70%; animation-delay: -7s; }
+    .blob3 { top: 30%; left: 30%; width: 50vw; height: 50vw; background: var(--blob-3); border-radius: 50% 50% 30% 70%; animation-duration: 20s; }
 
-        /* Project Grid */
-        main { padding-top: 150px; padding-bottom: 100px; }
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1px;
-            background-color: var(--border-gray);
-            border: 1px solid var(--border-gray);
-        }
+    @keyframes fluidMove {
+      0% { transform: scale(1) translate(0, 0) rotate(0deg); }
+      50% { transform: scale(1.1) translate(40px, -40px) rotate(15deg); }
+      100% { transform: scale(0.95) translate(-20px, 60px) rotate(-10deg); }
+    }
 
-        .project-card {
-            background-color: white;
-            padding: 20px;
-            aspect-ratio: 4/5;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
+    /* =========================================
+       📐 页面布局与炫酷卡片
+       ========================================= */
+    .container {
+      max-width: 1400px; /* 控制最大宽度，保持留白 */
+      margin: 0 auto;
+      padding: 120px 40px;
+    }
 
-        .project-card:hover { filter: contrast(1.1); }
-        .project-card img { width: 100%; height: 85%; object-fit: cover; background: #f0f0f0; }
-        .project-info { margin-top: 15px; }
-        .project-title { font-weight: bold; font-size: 14px; text-transform: uppercase; }
+    /* 头部区域 */
+    header {
+      text-align: left;
+      margin-bottom: 120px;
+    }
+    h1 {
+      font-size: 6rem; /* 巨大、醒目的标题 */
+      letter-spacing: -0.05em;
+      font-weight: 700;
+      margin: 0 0 20px 0;
+      background: linear-gradient(180deg, #1d1d1f 0%, #86868b 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    p.subtitle { font-size: 1.8rem; color: var(--text-muted); max-width: 800px; margin: 0; line-height: 1.4; font-weight: 400; }
 
-        /* Detail Page Overlay */
-        #detail-view {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: white;
-            z-index: 200;
-            overflow-y: auto;
-            padding: 40px;
-        }
+    /* 便当盒 (Bento Grid) 布局 */
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      grid-auto-rows: minmax(400px, auto);
+    }
+    /* 卡片的网格跨度 */
+    .card-large { grid-column: span 2; grid-row: span 2; }
+    .card-medium { grid-column: span 1; grid-row: span 2; }
+    .card-wide { grid-column: span 2; grid-row: span 1; }
 
-        .detail-header { margin-top: 100px; max-width: 800px; }
-        .detail-header h1 { font-size: 48px; margin-bottom: 20px; }
-        .bilingual-text { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin: 50px 0; border-top: 1px solid #000; padding-top: 20px;}
-        
-        .gallery {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-        }
-        .gallery img { width: 100%; background: #eee; }
+    /* 核心：炫酷毛玻璃卡片 */
+    .glass-card {
+      background: var(--glass-bg);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border: var(--glass-border);
+      border-radius: var(--border-radius-card);
+      padding: 50px;
+      box-shadow: var(--glass-shadow);
+      transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1); /* 平滑、高级的动画 */
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      text-decoration: none;
+      color: inherit;
+      position: relative;
+      overflow: hidden;
+      opacity: 0; /* 用于滚动进入时的淡入动画 */
+      transform: translateY(30px);
+    }
+    /* 滚动进入时的动画状态 */
+    .glass-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
 
-        .close-btn { position: fixed; top: 30px; right: 40px; font-size: 30px; cursor: pointer; z-index: 300; }
+    /* 卡片悬停时的炫酷效果：稍微缩小、加深阴影 */
+    .glass-card:hover {
+      transform: scale(0.98);
+      box-shadow: 0 60px 100px rgba(0, 0, 0, 0.08);
+      background: rgba(255, 255, 255, 0.8);
+    }
 
-        @media (max-width: 768px) {
-            .grid { grid-template-columns: 1fr; }
-            .bilingual-text { grid-template-columns: 1fr; }
-        }
-    </style>
+    /* 卡片内的图片展示区 */
+    .image-placeholder {
+      width: 100%; height: 100%;
+      border-radius: var(--border-radius-img);
+      background-color: rgba(0, 0, 0, 0.03);
+      margin-top: auto; /* 图片放在卡片底部 */
+      overflow: hidden;
+      position: relative;
+      transition: transform 0.6s ease;
+    }
+    .image-placeholder img {
+      width: 100%; height: 100%; object-fit: cover; /* 保持比例填满 */
+      transition: transform 1s ease, filter 1s ease; /* 图片缩放和模糊的平滑动画 */
+    }
+    /* 悬停时的图片动态模糊效果 */
+    .glass-card:hover .image-placeholder img {
+      transform: scale(1.05);
+      filter: blur(5px);
+    }
+
+    /* 炫酷的图片上滑浮出效果 (参考 a black cove) */
+    .image-placeholder::after {
+      content: '';
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: linear-gradient(0deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 30%);
+      opacity: 0;
+      transition: opacity 0.6s ease;
+    }
+    .glass-card:hover .image-placeholder::after { opacity: 1; }
+
+    /* 卡片文字排版 */
+    .text-content { z-index: 1; }
+    h3 { font-size: 2.8rem; margin: 0 0 15px 0; font-weight: 600; letter-spacing: -0.03em; }
+    .desc { font-size: 1.3rem; color: var(--text-muted); line-height: 1.5; margin: 0; font-weight: 400; }
+
+    /* 响应式适配：手机端全部变单列 */
+    @media (max-width: 1000px) {
+      .bento-grid { grid-template-columns: 1fr; }
+      .card-large, .card-medium, .card-wide { grid-column: span 1; grid-row: span 1; }
+      h1 { font-size: 4rem; }
+    }
+  </style>
 </head>
 <body>
 
-    <nav>
-        <div class="logo">KongYJen Designer</div>
-        <ul class="nav-links">
-            <li>WORKS</li>
-            <li>INFO</li>
-            <li>CONTACT</li>
-        </ul>
-    </nav>
+  <div class="background">
+    <div class="blob blob1"></div>
+    <div class="blob blob2"></div>
+    <div class="blob blob3"></div>
+  </div>
 
-    <main>
-        <div class="grid" id="projectGrid">
-            </div>
-    </main>
+  <div class="container">
+    <header>
+      <h1>Portfolio.</h1>
+      <p class="subtitle">让设计成为一种本能，用像素和物理空间讲述故事。</p>
+    </header>
 
-    <div id="detail-view">
-        <div class="close-btn" onclick="closeDetail()">×</div>
-        <div class="detail-header">
-            <h1 id="detailTitle">PROJECT NAME</h1>
-            <p>Year: 2026 | Client: Editorial</p>
+    <div class="bento-grid">
+      <a href="#" class="glass-card card-large">
+        <div class="text-content">
+          <h3>UI / UX 设计</h3>
+          <p class="desc">直觉驱动的界面体验。涵盖跨端应用交互，以及粒子相册、坦克大战等趣味项目的 Web 体验设计。</p>
         </div>
-
-        <div class="bilingual-text">
-            <div class="en">
-                <p>The convergence of Bauhaus colors and stainless steel, we find a new resonance between humanity and machine. This project explores the boundary between the physical metal and the digital primary colors, creating a visual syntax that speaks to the future of design.</p>
-            </div>
-            <div class="zh">
-                <p>在包豪斯色彩与不锈钢的交汇点，我们找到了人与机器之间的新共鸣。本项目探索了物理金属与数字原色之间的界限，创造了一种对话未来设计的视觉语法。</p>
-            </div>
+        <div class="image-placeholder">
+          <img src="https://images.unsplash.com/photo-1618761714954-0b8cd0026356?q=80&w=1400&auto=format&fit=crop" alt="UI作品预览">
         </div>
+      </a>
 
-        <div class="gallery" id="detailGallery">
-            </div>
+      <a href="#" class="glass-card card-medium">
+        <div class="text-content">
+          <h3>平面与品牌</h3>
+          <p class="desc">包含实体产品 Mockup 渲染（如宠物零食包装等）及全套视觉规范设计。</p>
+        </div>
+        <div class="image-placeholder">
+          <img src="https://images.unsplash.com/photo-1600132806370-bf17e65e942f?q=80&w=1000&auto=format&fit=crop" alt="平面作品预览">
+        </div>
+      </a>
+
+      <a href="#" class="glass-card card-wide">
+        <div class="text-content">
+          <h3>地产视觉</h3>
+          <p class="desc">空间美学与商业价值的对话。楼书画册排版、地产导视系统及案场空间视觉传达。</p>
+        </div>
+        <div class="image-placeholder">
+          <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1400&auto=format&fit=crop" alt="地产作品预览">
+        </div>
+      </a>
+
+      <a href="#" class="glass-card card-medium">
+        <div class="text-content">
+          <h3>数字插画</h3>
+          <p class="desc">细腻笔触构建独特的视觉叙事。</p>
+        </div>
+        <div class="image-placeholder">
+          <img src="https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?q=80&w=1000&auto=format&fit=crop" alt="插画作品预览">
+        </div>
+      </a>
     </div>
+  </div>
 
-    <script>
-        // Generate 30 projects
-        const grid = document.getElementById('projectGrid');
-        for (let i = 1; i <= 30; i++) {
-            const card = document.createElement('div');
-            card.className = 'project-card';
-            card.onclick = () => openDetail(`Project ${i}`);
-            card.innerHTML = `
-                <img src="https://picsum.photos/seed/${i+100}/800/1000" alt="Work ${i}">
-                <div class="project-info">
-                    <div class="project-title">WK-${String(i).padStart(3, '0')} / Bauhaus Steel Experiment</div>
-                </div>
-            `;
-            grid.appendChild(card);
+  <script>
+    // 使用 Intersection Observer 实现卡片随着滚动淡入浮出的炫酷效果 (参考 a black cove)
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        } else {
+          entry.target.classList.remove('visible'); // 如果你想卡片滑出屏幕后再次淡入，保留这行
         }
+      });
+    }, {
+      threshold: 0.1 // 当卡片 10% 进入屏幕时触发
+    });
 
-        function openDetail(title) {
-            document.getElementById('detailTitle').innerText = title;
-            const gallery = document.getElementById('detailGallery');
-            gallery.innerHTML = '';
-            // Generate 15 images for detail
-            for (let i = 1; i <= 15; i++) {
-                const img = document.createElement('img');
-                img.src = `https://picsum.photos/seed/detail${i+Math.random()}/1200/800`;
-                gallery.appendChild(img);
-            }
-            document.getElementById('detail-view').style.display = 'block';
-            document.body.style.overflow = 'hidden';
-        }
+    document.querySelectorAll('.glass-card').forEach((card) => {
+      observer.observe(card);
+    });
+  </script>
 
-        function closeDetail() {
-            document.getElementById('detail-view').style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-    </script>
 </body>
 </html>
